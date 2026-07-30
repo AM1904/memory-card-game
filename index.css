@@ -239,3 +239,207 @@ Media queries
         grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
     }
 }
+
+/*===========================
+Player Name Input
+============================*/
+.player-name-input {
+    background-color: var(--dark-primary);
+    color: var(--light-primary);
+    font-family: inherit;
+    font-size: 1rem;
+    padding: .5em .75em;
+    border: 2px solid var(--light-secondary);
+    border-radius: .5em;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.player-name-input::placeholder {
+    color: var(--btn-disabled);
+}
+
+.player-name-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.25);
+}
+
+/*===========================
+Name Modal
+============================*/
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 20, 36, 0.82);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: fadeIn .18s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.modal {
+    background: var(--light-secondary);
+    color: var(--dark-primary);
+    border-radius: .75em;
+    padding: 2em 2.5em;
+    width: min(420px, 90vw);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    box-shadow: 0 8px 40px rgba(0,0,0,.5);
+    animation: slideUp .2s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(18px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal__title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark-primary);
+    margin: 0;
+}
+
+.modal__subtitle {
+    font-size: .95rem;
+    color: var(--dark-primary);
+    opacity: .7;
+    margin: 0;
+}
+
+.modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+    margin-top: .25em;
+}
+
+.modal__input {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1.05rem;
+}
+
+.modal__actions {
+    display: flex;
+    gap: .75em;
+    justify-content: flex-end;
+}
+
+.modal__cancel {
+    background-color: transparent;
+    color: var(--dark-primary);
+    border-color: var(--dark-primary);
+    opacity: .65;
+}
+
+.modal__cancel:hover {
+    opacity: 1;
+    background-color: var(--light-primary);
+}
+
+.modal__confirm:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
+
+.modal__confirm:disabled:hover {
+    background-color: var(--dark-primary);
+    color: var(--light-primary);
+    box-shadow: none;
+}
+
+/*===========================
+Game Over Screen
+============================*/
+.game-over {
+    max-width: 540px;
+    width: 100%;
+    gap: 1.25em;
+}
+
+.game-over__congrats {
+    color: var(--dark-primary);
+}
+
+.game-over__name {
+    color: var(--dark-primary);
+    font-weight: 800;
+}
+
+.game-over__time {
+    color: var(--dark-primary);
+    opacity: .85;
+}
+
+/*===========================
+Leaderboard
+============================*/
+.leaderboard {
+    width: 100%;
+    margin-top: .5em;
+}
+
+.leaderboard__title {
+    color: var(--dark-primary);
+    font-size: 1.2rem;
+    margin-bottom: .6em;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.leaderboard__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    color: var(--dark-primary);
+}
+
+.leaderboard__table thead tr {
+    background-color: var(--dark-primary);
+    color: var(--light-primary);
+}
+
+.leaderboard__table th,
+.leaderboard__table td {
+    padding: .45em .75em;
+    text-align: center;
+}
+
+.leaderboard__table tbody tr:nth-child(even) {
+    background-color: rgba(18, 45, 72, 0.08);
+}
+
+.leaderboard__table tbody tr:hover {
+    background-color: rgba(18, 45, 72, 0.15);
+    transition: background-color .15s;
+}
+
+.leaderboard__row--top td {
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.leaderboard__rank {
+    font-size: 1.2rem;
+}
+
+.leaderboard__name {
+    text-align: left;
+    font-weight: 600;
+}
+
+.leaderboard__time {
+    font-variant-numeric: tabular-nums;
+    color: #2a5980;
+    font-weight: 700;
+}
