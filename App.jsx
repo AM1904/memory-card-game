@@ -4,7 +4,7 @@ import MemoryCard from '/components/MemoryCard'
 import AssistiveTechInfo from '/components/AssistiveTechInfo'
 import GameOver from '/components/GameOver'
 import ErrorCard from '/components/ErrorCard'
-import NameModal from '/components/NameModal'
+import Leaderboard from '/components/Leaderboard'
 
 const LEADERBOARD_KEY = 'memoryGameLeaderboard'
 
@@ -20,6 +20,14 @@ function saveLeaderboard(entries) {
     localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(entries))
 }
 
+function formatTime(seconds) {
+    const m = Math.floor(seconds / 60)
+    const s = seconds % 60
+    return m > 0
+        ? `${m}m ${s.toString().padStart(2, '0')}s`
+        : `${s}s`
+}
+
 export default function App() {
     const initialFormData = { category: "animals-and-nature", number: 10 }
 
@@ -32,11 +40,9 @@ export default function App() {
     const [areAllCardsMatched, setAreAllCardsMatched] = useState(false)
     const [isError, setIsError] = useState(false)
 
-    // Modal state
-    const [showNameModal, setShowNameModal] = useState(false)
     const [playerName, setPlayerName] = useState("")
 
-    // Silent timer (never shown during gameplay)
+    // Live timer shown during gameplay
     const [elapsedTime, setElapsedTime] = useState(0)
     const timerRef = useRef(null)
 
@@ -73,15 +79,9 @@ export default function App() {
         setPlayerName(e.target.value)
     }
 
-    // Step 1: "Start Game" clicked → show name modal
-    function handleStartClick(e) {
+    async function handleStartClick(e) {
         e.preventDefault()
-        setShowNameModal(true)
-    }
-
-    // Step 2: Modal confirmed → fetch data and launch game
-    async function handleModalConfirm() {
-        setShowNameModal(false)
+        if (!playerName.trim()) return
 
         try {
             const response = await fetch(`https://emojihub.yurace.pro/api/all/category/${formData.category}`)
@@ -97,7 +97,7 @@ export default function App() {
             setEmojisData(emojisArray)
             setIsGameOn(true)
 
-            // Start silent background timer
+            // Start live timer
             setElapsedTime(0)
             clearInterval(timerRef.current)
             timerRef.current = setInterval(() => {
@@ -110,10 +110,6 @@ export default function App() {
         } finally {
             setIsFirstRender(false)
         }
-    }
-
-    function handleModalCancel() {
-        setShowNameModal(false)
     }
 
     async function getDataSlice(data) {
@@ -175,29 +171,47 @@ export default function App() {
         <main>
             <h1>Memory Game</h1>
 
-            {/* Name popup modal */}
-            {showNameModal &&
-                <NameModal
-                    playerName={playerName}
-                    onChange={handleNameChange}
-                    onConfirm={handleModalConfirm}
-                    onCancel={handleModalCancel}
-                />
-            }
-
-            {/* Setup form */}
+            {/* Setup form — name field is built in */}
             {!isGameOn && !isError &&
                 <Form
                     handleSubmit={handleStartClick}
                     handleChange={handleFormChange}
+                    handleNameChange={handleNameChange}
+                    playerName={playerName}
                     isFirstRender={isFirstRender}
                 />
             }
 
-            {/* Game in progress — NO timer shown */}
-            {isGameOn && !areAllCardsMatched &&
-                <AssistiveTechInfo emojisData={emojisData} matchedCards={matchedCards} />
-            }
+            {/* Game in progress */}
+            {isGameOn && !areAllCardsMatched && (
+                <>
+                    {/* Live timer */}
+                    <div className="timer-bar">
+                        <span className="timer-bar__label">Time</span>
+                        <span className="timer-bar__value">{formatTime(elapsedTime)}</span>
+                        <span className="timer-bar__matches">
+                            {matchedCards.length / 2} / {emojisData.length / 2} matched
+                        </span>
+                    </div>
+
+                    <AssistiveTechInfo emojisData={emojisData} matchedCards={matchedCards} />
+
+                    {/* Side-by-side: cards + leaderboard */}
+                    <div className="game-layout">
+                        <MemoryCard
+                            handleClick={turnCard}
+                            data={emojisData}
+                            selectedCards={selectedCards}
+                            matchedCards={matchedCards}
+                        />
+                        {leaderboard.length > 0 && (
+                            <aside className="side-leaderboard">
+                                <Leaderboard entries={leaderboard} />
+                            </aside>
+                        )}
+                    </div>
+                </>
+            )}
 
             {/* Game over + leaderboard */}
             {areAllCardsMatched &&
@@ -206,16 +220,6 @@ export default function App() {
                     playerName={playerName}
                     timeTaken={elapsedTime}
                     leaderboard={leaderboard}
-                />
-            }
-
-            {/* Cards */}
-            {isGameOn &&
-                <MemoryCard
-                    handleClick={turnCard}
-                    data={emojisData}
-                    selectedCards={selectedCards}
-                    matchedCards={matchedCards}
                 />
             }
 
