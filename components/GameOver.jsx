@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import RegularButton from './RegularButton'
 import Leaderboard from './Leaderboard'
 
-export default function GameOver({ handleClick, playerName, timeTaken, leaderboard }) {
+export default function GameOver({ handleReset, handlePlayAgain, playerName, timeTaken, leaderboard }) {
     const divRef = useRef(null)
 
     useEffect(() => {
@@ -24,15 +24,20 @@ export default function GameOver({ handleClick, playerName, timeTaken, leaderboa
             ref={divRef}
         >
             <p className="p--large game-over__congrats">
-                Well done, <span className="game-over__name">{playerName}</span>!
-            </p>
-            <p className="p--regular game-over__time">
-                You matched all cards in <strong>{formatTime(timeTaken)}</strong>
+                🎉 You Matched All Cards in <strong>{formatTime(timeTaken)}</strong>!
             </p>
             <Leaderboard entries={leaderboard} />
-            <RegularButton handleClick={handleClick}>
-                Play Again
-            </RegularButton>
+            <div className="game-over__actions">
+                <RegularButton handleClick={handlePlayAgain}>
+                    Play Again
+                </RegularButton>
+                <button
+                    className="btn btn--outline"
+                    onClick={handleReset}
+                >
+                    Reset Game
+                </button>
+            </div>
         </div>
     )
 }

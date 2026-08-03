@@ -161,6 +161,35 @@ export default function App() {
         setAreAllCardsMatched(false)
         setElapsedTime(0)
         setPlayerName("")
+        setIsFirstRender(true)
+    }
+
+    async function playAgain() {
+        try {
+            const response = await fetch(`https://emojihub.yurace.pro/api/all/category/${formData.category}`)
+            if (!response.ok) throw new Error("Could not fetch data from API")
+
+            const data = await response.json()
+            const dataSlice = await getDataSlice(data)
+            const emojisArray = await getEmojisArray(dataSlice)
+
+            setEmojisData(emojisArray)
+            setSelectedCards([])
+            setMatchedCards([])
+            setAreAllCardsMatched(false)
+
+            // Restart timer
+            clearInterval(timerRef.current)
+            setElapsedTime(0)
+            timerRef.current = setInterval(() => {
+                setElapsedTime(prev => prev + 1)
+            }, 1000)
+
+            setIsGameOn(true)
+        } catch (err) {
+            console.error(err)
+            setIsError(true)
+        }
     }
 
     function resetError() {
@@ -216,7 +245,8 @@ export default function App() {
             {/* Game over + leaderboard */}
             {areAllCardsMatched &&
                 <GameOver
-                    handleClick={resetGame}
+                    handleReset={resetGame}
+                    handlePlayAgain={playAgain}
                     playerName={playerName}
                     timeTaken={elapsedTime}
                     leaderboard={leaderboard}

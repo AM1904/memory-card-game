@@ -1,5 +1,6 @@
-* {
+*, *::before, *::after {
     margin: 0;
+    box-sizing: border-box;
 }
 
 :root {
@@ -26,6 +27,7 @@ main {
     height: 100%;
     min-height: 100vh;
     padding: 2em;
+    overflow-x: hidden;
 }
 
 .wrapper {
@@ -319,24 +321,43 @@ Game Layout (cards + sidebar)
 ============================*/
 .game-layout {
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;   /* mobile: cards then leaderboard */
+    align-items: stretch;
     gap: 1.5em;
     width: 100%;
 }
 
 .game-layout .card-container {
-    flex: 1;
-    min-width: 0;
+    width: 100%;
 }
 
 .side-leaderboard {
-    flex-shrink: 0;
-    width: 240px;
+    width: 100%;              /* full-width on mobile */
     background: linear-gradient(160deg, var(--dark-primary), #1a3f61);
     border: 1px solid var(--light-secondary);
     border-radius: .6em;
     padding: 1.25em 1em;
     box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+/* ≥768 px — restore side-by-side layout */
+@media (min-width: 768px) {
+    .game-layout {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .game-layout .card-container {
+        flex: 1;
+        min-width: 0;
+        width: auto;
+    }
+
+    .side-leaderboard {
+        flex-shrink: 0;
+        width: 240px;
+        margin-right: 2em;
+    }
 }
 
 .side-leaderboard .leaderboard {
@@ -383,13 +404,14 @@ Game Layout (cards + sidebar)
 Game Over Screen
 ============================*/
 .game-over {
-    max-width: 540px;
+    max-width: 580px;
     width: 100%;
     gap: 1.25em;
 }
 
 .game-over__congrats {
     color: var(--dark-primary);
+    font-weight: 700;
 }
 
 .game-over__name {
@@ -400,6 +422,36 @@ Game Over Screen
 .game-over__time {
     color: var(--dark-primary);
     opacity: .85;
+}
+
+.game-over__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75em;
+}
+
+/* Outline / ghost button — used for secondary actions like Reset Game */
+.btn--outline {
+    background-color: transparent;
+    color: var(--dark-primary);
+    font-family: inherit;
+    font-size: 1.25rem;
+    font-weight: 600;
+    padding: .35em 1.1em;
+    border: 2px solid var(--dark-primary);
+    border-radius: .5em;
+    cursor: pointer;
+    transition: background-color .2s, color .2s, box-shadow .2s;
+    width: max-content;
+    margin: 0 auto;
+}
+
+.btn--outline:hover,
+.btn--outline:focus {
+    background-color: var(--dark-primary);
+    color: var(--light-primary);
+    box-shadow: 0 0 5px 1px var(--dark-primary);
 }
 
 /*===========================
@@ -432,8 +484,18 @@ Leaderboard
 
 .leaderboard__table th,
 .leaderboard__table td {
-    padding: .45em .75em;
+    padding: .45em 1em;
     text-align: center;
+}
+
+.leaderboard__table th:last-child,
+.leaderboard__table td:last-child {
+    padding-right: 1.75em;
+}
+
+.leaderboard__table th:first-child,
+.leaderboard__table td:first-child {
+    padding-left: 1.75em;
 }
 
 .leaderboard__table tbody tr:nth-child(even) {
@@ -455,7 +517,6 @@ Leaderboard
 }
 
 .leaderboard__name {
-    text-align: left;
     font-weight: 600;
 }
 
