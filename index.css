@@ -407,37 +407,200 @@ Game Layout (cards + sidebar)
 }
 
 /*===========================
-Game Over Screen
+Game Over — Full Page Layout
 ============================*/
-.game-over {
-    max-width: 580px;
+.gameover-page {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
     width: 100%;
+    min-height: 100vh;
+    background-color: #0d2137;
+    color: var(--light-primary);
+    outline: none;
+}
+
+/* Header bar */
+.gameover-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .75em 2em;
+    background-color: #0d2137;
+    border-bottom: 1px solid rgba(214,228,239,0.12);
+}
+
+.gameover-header__title {
+    color: var(--accent);
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.gameover-header__right {
+    display: flex;
+    align-items: center;
     gap: 1.25em;
 }
 
-.game-over__congrats {
-    color: var(--dark-primary);
+.gameover-header__player {
+    font-size: .95rem;
+    color: var(--light-primary);
+    letter-spacing: .5px;
+}
+
+.gameover-header__player strong {
+    color: var(--light-primary);
     font-weight: 700;
 }
 
-.game-over__name {
+.gameover-header__timer {
+    background-color: var(--accent);
     color: var(--dark-primary);
     font-weight: 800;
+    font-size: .9rem;
+    letter-spacing: 1.5px;
+    padding: .3em .85em;
+    border-radius: .4em;
+    font-variant-numeric: tabular-nums;
 }
 
-.game-over__time {
+/* Win banner */
+.gameover-banner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .9em;
+    background: linear-gradient(135deg, #132d48, #1a3f61);
+    border: 1px solid rgba(214,228,239,0.15);
+    border-radius: .6em;
+    padding: 1.25em 2em;
+    margin: 1.25em 1.5em;
+}
+
+.gameover-banner__text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--light-primary);
+    text-align: center;
+}
+
+.gameover-banner__text strong {
+    color: var(--accent);
+}
+
+.gameover-banner__actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.gameover-banner__actions .btn--outline {
+    color: var(--light-primary);
+    border-color: var(--light-primary);
+}
+
+.gameover-banner__actions .btn--outline:hover,
+.gameover-banner__actions .btn--outline:focus {
+    background-color: var(--light-primary);
     color: var(--dark-primary);
-    opacity: .85;
 }
 
-.game-over__actions {
+/* Body: board + leaderboard */
+.gameover-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    padding: 0 1.5em 2em;
+    align-items: flex-start;
+}
+
+@media (min-width: 768px) {
+    .gameover-body {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+}
+
+.gameover-board {
+    flex: 1 1 50%;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: .75em;
 }
 
-/* Outline / ghost button — used for secondary actions like Reset Game */
+.gameover-board__label {
+    font-size: .95rem;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: .5px;
+}
+
+.gameover-board .card-container {
+    width: 100%;
+}
+
+/* Finished cards: slightly dimmed */
+.gameover-board .btn--emoji__back--matched {
+    background-color: var(--light-primary);
+    border-color: var(--light-secondary);
+    cursor: default;
+    opacity: .95;
+}
+
+.gameover-leaderboard {
+    flex: 1 1 50%;
+    min-width: 0;
+    background: linear-gradient(160deg, var(--dark-primary), #1a3f61);
+    border: 1px solid rgba(214,228,239,0.18);
+    border-radius: .6em;
+    padding: 1.25em 1em;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+/* Leaderboard inside gameover */
+.gameover-leaderboard .leaderboard__title {
+    color: var(--accent);
+    font-size: 1.05rem;
+    text-align: center;
+}
+
+.gameover-leaderboard .leaderboard__table {
+    color: var(--light-primary);
+    font-size: .9rem;
+}
+
+.gameover-leaderboard .leaderboard__table thead tr {
+    background-color: rgba(245,197,24,0.12);
+    color: var(--accent);
+}
+
+.gameover-leaderboard .leaderboard__rank {
+    color: var(--light-secondary);
+}
+
+.gameover-leaderboard .leaderboard__name {
+    color: var(--light-primary);
+    font-weight: 600;
+}
+
+.gameover-leaderboard .leaderboard__row--current {
+    background-color: rgba(107,142,35,0.3) !important;
+}
+
+.gameover-leaderboard .leaderboard__row--current .leaderboard__rank,
+.gameover-leaderboard .leaderboard__row--current .leaderboard__name {
+    color: var(--accent);
+}
+
+/* Outline / ghost button */
 .btn--outline {
     background-color: transparent;
     color: var(--dark-primary);
@@ -460,6 +623,7 @@ Game Over Screen
     box-shadow: 0 0 5px 1px var(--dark-primary);
 }
 
+
 /*===========================
 Leaderboard
 ============================*/
@@ -481,7 +645,7 @@ Leaderboard
     border-collapse: collapse;
     font-size: 1rem;
     color: var(--dark-primary);
-    table-layout: fixed;
+    table-layout: auto;
     word-break: break-word;
 }
 
@@ -492,18 +656,29 @@ Leaderboard
 
 .leaderboard__table th,
 .leaderboard__table td {
-    padding: .45em .75em;
+    padding: .5em .75em;
+    text-align: left;
+}
+
+.leaderboard__th-rank {
+    width: 56px;
+    text-align: center !important;
+}
+
+.leaderboard__th-player {
+    min-width: 90px;
+}
+
+.leaderboard__th-times {
+    text-align: right !important;
+}
+
+.leaderboard__table td.leaderboard__rank {
     text-align: center;
 }
 
-.leaderboard__table th:last-child,
-.leaderboard__table td:last-child {
-    padding-right: 1em;
-}
-
-.leaderboard__table th:first-child,
-.leaderboard__table td:first-child {
-    padding-left: 1em;
+.leaderboard__table td.leaderboard__times-cell {
+    text-align: right;
 }
 
 .leaderboard__table tbody tr:nth-child(even) {
@@ -515,21 +690,85 @@ Leaderboard
     transition: background-color .15s;
 }
 
-.leaderboard__row--top td {
+.leaderboard__row--current {
+    background-color: rgba(107,142,35,0.18) !important;
+}
+
+.leaderboard__row--current .leaderboard__rank,
+.leaderboard__row--current .leaderboard__name {
+    color: var(--accent);
     font-weight: 700;
-    font-size: 1.05rem;
 }
 
 .leaderboard__rank {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--light-secondary);
 }
 
 .leaderboard__name {
     font-weight: 600;
 }
 
-.leaderboard__time {
-    font-variant-numeric: tabular-nums;
-    color: #2a5980;
-    font-weight: 700;
+/* Time badges */
+.leaderboard__times-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35em;
+    justify-content: flex-end;
+    align-items: center;
 }
+
+.leaderboard__time-badge {
+    display: inline-block;
+    background-color: var(--dark-primary);
+    color: var(--accent);
+    font-size: .78rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .5px;
+    padding: .18em .55em;
+    border-radius: .35em;
+    border: 1px solid rgba(245,197,24,0.3);
+}
+
+/* Inside side-leaderboard during game */
+.side-leaderboard .leaderboard__title {
+    color: var(--accent);
+}
+
+.side-leaderboard .leaderboard__table {
+    color: var(--light-primary);
+    font-size: .85rem;
+}
+
+.side-leaderboard .leaderboard__table thead tr {
+    background-color: rgba(245, 197, 24, 0.15);
+    color: var(--accent);
+}
+
+.side-leaderboard .leaderboard__table tbody tr:nth-child(even) {
+    background-color: rgba(255,255,255,0.04);
+}
+
+.side-leaderboard .leaderboard__table tbody tr:hover {
+    background-color: rgba(255,255,255,0.08);
+}
+
+.side-leaderboard .leaderboard__name {
+    color: var(--light-primary);
+}
+
+.side-leaderboard .leaderboard__rank {
+    color: var(--light-secondary);
+}
+
+.side-leaderboard .leaderboard__time-badge {
+    background-color: rgba(245,197,24,0.15);
+    color: var(--accent);
+    border-color: rgba(245,197,24,0.25);
+}
+
+.side-leaderboard .leaderboard__row--current {
+    background-color: rgba(107,142,35,0.25) !important;
+}

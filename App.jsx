@@ -197,63 +197,66 @@ export default function App() {
     }
 
     return (
-        <main>
-            <h1>Memory Game</h1>
-
-            {/* Setup form — name field is built in */}
-            {!isGameOn && !isError &&
-                <Form
-                    handleSubmit={handleStartClick}
-                    handleChange={handleFormChange}
-                    handleNameChange={handleNameChange}
-                    playerName={playerName}
-                    isFirstRender={isFirstRender}
-                />
-            }
-
-            {/* Game in progress */}
-            {isGameOn && !areAllCardsMatched && (
-                <>
-                    {/* Live timer */}
-                    <div className="timer-bar">
-                        <span className="timer-bar__label">Time</span>
-                        <span className="timer-bar__value">{formatTime(elapsedTime)}</span>
-                        <span className="timer-bar__matches">
-                            {matchedCards.length / 2} / {emojisData.length / 2} matched
-                        </span>
-                    </div>
-
-                    <AssistiveTechInfo emojisData={emojisData} matchedCards={matchedCards} />
-
-                    {/* Side-by-side: cards + leaderboard */}
-                    <div className="game-layout">
-                        <MemoryCard
-                            handleClick={turnCard}
-                            data={emojisData}
-                            selectedCards={selectedCards}
-                            matchedCards={matchedCards}
-                        />
-                        {leaderboard.length > 0 && (
-                            <aside className="side-leaderboard">
-                                <Leaderboard entries={leaderboard} />
-                            </aside>
-                        )}
-                    </div>
-                </>
-            )}
-
-            {/* Game over + leaderboard */}
-            {areAllCardsMatched &&
+        <>
+            {areAllCardsMatched ?
                 <GameOver
                     handleReset={resetGame}
                     handlePlayAgain={playAgain}
                     playerName={playerName}
                     timeTaken={elapsedTime}
                     leaderboard={leaderboard}
+                    emojisData={emojisData}
+                    matchedCards={matchedCards}
                 />
-            }
+            : (
+                <main>
+                    <h1>Memory Game</h1>
 
-            {isError && <ErrorCard handleClick={resetError} />}
-        </main>
+                    {/* Setup form — name field is built in */}
+                    {!isGameOn && !isError &&
+                        <Form
+                            handleSubmit={handleStartClick}
+                            handleChange={handleFormChange}
+                            handleNameChange={handleNameChange}
+                            playerName={playerName}
+                            isFirstRender={isFirstRender}
+                        />
+                    }
+
+                    {/* Game in progress */}
+                    {isGameOn && !areAllCardsMatched && (
+                        <>
+                            {/* Live timer */}
+                            <div className="timer-bar">
+                                <span className="timer-bar__label">Time</span>
+                                <span className="timer-bar__value">{formatTime(elapsedTime)}</span>
+                                <span className="timer-bar__matches">
+                                    {matchedCards.length / 2} / {emojisData.length / 2} matched
+                                </span>
+                            </div>
+
+                            <AssistiveTechInfo emojisData={emojisData} matchedCards={matchedCards} />
+
+                            {/* Side-by-side: cards + leaderboard */}
+                            <div className="game-layout">
+                                <MemoryCard
+                                    handleClick={turnCard}
+                                    data={emojisData}
+                                    selectedCards={selectedCards}
+                                    matchedCards={matchedCards}
+                                />
+                                {leaderboard.length > 0 && (
+                                    <aside className="side-leaderboard">
+                                        <Leaderboard entries={leaderboard} currentPlayer={playerName} />
+                                    </aside>
+                                )}
+                            </div>
+                        </>
+                    )}
+
+                    {isError && <ErrorCard handleClick={resetError} />}
+                </main>
+            )}
+        </>
     )
 }
