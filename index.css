@@ -661,8 +661,10 @@ Leaderboard
 }
 
 .leaderboard__th-rank {
-    width: 56px;
+    width: 70px;
+    min-width: 70px;
     text-align: center !important;
+    white-space: nowrap;
 }
 
 .leaderboard__th-player {
